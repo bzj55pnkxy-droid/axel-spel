@@ -14,44 +14,270 @@ canvas {
   image-rendering: pixelated;
 }
 
+.hidden {
+  display: none !important;
+}
+
+/* --- Title / Blocker --- */
+
 #blocker {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.92);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10;
   cursor: pointer;
+  transition: opacity 1.5s ease-in-out;
 }
 
 #blocker.hidden {
   display: none;
 }
 
-#instructions {
+#blocker.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#title-screen {
   text-align: center;
   color: #999;
   font-family: monospace;
 }
 
-#instructions h1 {
+#title-screen h1 {
   font-size: 2.5rem;
   letter-spacing: 0.3em;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   color: #ccc;
 }
 
-#instructions p {
+.tagline {
+  font-size: 0.85rem;
+  color: #555;
+  font-style: italic;
+  margin-bottom: 2rem;
+  letter-spacing: 0.15em;
+}
+
+.start-prompt {
   font-size: 1rem;
-  margin-bottom: 0.5rem;
+  color: #888;
+  margin-bottom: 1.5rem;
+  animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
 .controls-hint {
-  font-size: 0.8rem !important;
-  color: #666 !important;
-  margin-top: 1rem !important;
+  font-size: 0.75rem !important;
+  color: #444 !important;
+  margin-top: 0.5rem;
+}
+
+/* --- Narrative Overlay --- */
+
+#narrative-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 15;
+  cursor: default;
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+#narrative-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#narrative-text {
+  font-family: monospace;
+  font-size: 1rem;
+  color: #777;
+  text-align: center;
+  max-width: 60%;
+  line-height: 1.8;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+#narrative-text.visible {
+  opacity: 1;
+}
+
+/* --- Crosshair --- */
+
+#crosshair {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+#crosshair::before,
+#crosshair::after {
+  content: '';
+  position: absolute;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+#crosshair::before {
+  width: 2px;
+  height: 12px;
+  left: 5px;
+  top: 0;
+}
+
+#crosshair::after {
+  width: 12px;
+  height: 2px;
+  top: 5px;
+  left: 0;
+}
+
+/* --- Interact Prompt --- */
+
+#interact-prompt {
+  position: fixed;
+  bottom: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: #ddd;
+  font-family: monospace;
+  font-size: 0.85rem;
+  padding: 0.4em 0.8em;
+  border: 1px solid #444;
+  pointer-events: none;
+  z-index: 5;
+  white-space: nowrap;
+}
+
+/* --- Puzzle Hint --- */
+
+#puzzle-hint {
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #555;
+  font-family: monospace;
+  font-size: 0.75rem;
+  font-style: italic;
+  pointer-events: none;
+  z-index: 5;
+  text-align: center;
+  max-width: 70%;
+  line-height: 1.4;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease-in-out, visibility 0.5s;
+}
+
+#puzzle-hint.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- Game Over / End Screen --- */
+
+#game-over {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 20;
+  cursor: default;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 2s ease-in-out, visibility 2s;
+}
+
+#game-over.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+#end-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  text-align: center;
+}
+
+#end-content h1 {
+  font-size: 2rem;
+  letter-spacing: 0.3em;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+#end-content > p {
+  font-size: 1rem;
+  color: #666;
+  letter-spacing: 0.1em;
+  margin-bottom: 3rem;
+}
+
+#credits {
+  color: #444;
+  font-size: 0.8rem;
+  line-height: 2;
+}
+
+.credit-title {
+  font-size: 1.2rem;
+  letter-spacing: 0.3em;
+  color: #666;
+  margin-bottom: 0.2rem;
+}
+
+.credit-sub {
+  font-size: 0.7rem;
+  color: #333;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+}
+
+.credit-line {
+  width: 120px;
+  height: 1px;
+  background: #222;
+  margin: 1rem auto;
+}
+
+.restart-prompt {
+  color: #555;
+  margin-top: 2rem;
+  font-size: 0.75rem;
+  animation: blink 2s ease-in-out infinite;
 }
